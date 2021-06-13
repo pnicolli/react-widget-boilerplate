@@ -1,0 +1,30 @@
+{
+  "name": "react-widget-boilerplate",
+  "version": "1.0.0",
+  "description": "Boilerplate for creating a react widget",
+  "main": "index.js",
+  "repository": "https://github.com/pnicolli/react-widget-boilerplate",
+  "author": "Piero Nicolli <pnicolli>",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack -p --mode production",
+    "prepublishOnly": "yarn build",
+    "start": "webpack-dev-server --mode development",
+    "test": "jest"
+  },
+  "engines": {
+    "node": ">= 10.13.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7",
+    "@babel/preset-env": "7",
+    "@babel/preset-react": "7",
+    "babel-loader": "8",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
+    "css-loader": "^5.2.6",
+    "mini-css-extract-plugin": "^1.6.0",
+    "webpack": "4",
+    "webpack-cli": "3",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
