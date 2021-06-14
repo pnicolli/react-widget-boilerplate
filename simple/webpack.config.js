@@ -15,7 +15,6 @@ module.exports = (webpackEnv, argv) => {
     },
     output: {
       path: buildPath,
-      filename: '[name].js',
     },
     plugins: [
       new CleanWebpackPlugin(),
@@ -23,12 +22,14 @@ module.exports = (webpackEnv, argv) => {
       new MiniCssExtractPlugin(),
     ],
     devServer: {
-      contentBase: buildPath,
+      devMiddleware: {
+        writeToDisk: true,
+      },
       hot: !isProduction,
       port: 3000,
-      writeToDisk: true,
+      static: [buildPath],
     },
-    devtool: 'cheap-module-source-map',
+    devtool: isProduction ? 'source-map' : 'eval',
     module: {
       rules: [
         {
