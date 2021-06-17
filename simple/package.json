@@ -9,8 +9,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "prepublishOnly": "yarn build",
-    "start": "webpack serve --mode development",
-    "test": "jest"
+    "start": "webpack serve --mode development"
   },
   "engines": {
     "node": ">= 10.13.0"

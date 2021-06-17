@@ -1,9 +1,20 @@
 const webpack = require('webpack');
 const path = require('path');
+const dotenv = require('dotenv');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (webpackEnv, argv) => {
+  // Parse .env file
+  const env = dotenv.config().parsed;
+  let envKeys = {};
+  if (env) {
+    envKeys = Object.keys(env).reduce((prev, next) => {
+      prev[`process.env.${next}`] = JSON.stringify(env[next]);
+      return prev;
+    }, {});
+  }
+
   // Used to separate development and production build logic.
   // This is set by the --mode flag we pass to webpack in the build scripts
   // (see the scripts in package.json)
@@ -30,6 +41,8 @@ module.exports = (webpackEnv, argv) => {
     plugins: [
       // Empties the output folder before every build
       new CleanWebpackPlugin(),
+      // Set env vars
+      new webpack.DefinePlugin(envKeys),
       // Enable hot module replacement in development only
       ...(isProduction ? [] : [new webpack.HotModuleReplacementPlugin()]),
       // Extract css in a dedicated css file
@@ -63,10 +76,32 @@ module.exports = (webpackEnv, argv) => {
               loader: 'css-loader',
               options: {
                 url: false,
+                modules: {
+                  localIdentName: '[path][name]__[local]--[hash:base64:5]',
+                },
               },
             },
+            'postcss-loader',
           ],
         },
+        {
+          test: /\.s[ac]ss$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader',
+              options: {
+                url: false,
+                modules: {
+                  localIdentName: '[path][name]__[local]--[hash:base64:5]',
+                },
+              },
+            },
+            'postcss-loader',
+            'sass-loader',
+          ],
+        },
+
         {
           test: /\.svg$/,
           use: [
